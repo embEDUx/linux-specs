@@ -1,0 +1,100 @@
+#! /bin/bash -e
+
+#####################
+# Configuration     # 							     
+#####################
+
+### Sources
+SRC_URL="https://www.kernel.org/pub/linux/kernel/v3.x/"
+SRC_FILE="linux-3.17.tar.gz"
+SRC_DIR="linux"
+SRC_CONF=".config"
+SRC_ARCH="arm"
+
+### Patches
+GPATCH_BASE_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs/"
+GPATCH_BASE_FILE="genpatches-3.17-5.base.tar.xz"
+GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
+GPATCH_DIR="gentoo-patches"
+
+### Outputs
+DST_IMG="zImage"
+DST_DTB="bcm2835-rpi-b.dtb"
+DST_MOD="modules"
+DST_DIR="output"
+DST_CONF=".config"
+DST_PREFIX="$(date '+%Y%m%d')_$(date '+%H-M-S')_3.15.5"
+
+#####################
+# Script            #
+#####################
+
+### Fetch linux sources
+mkdir ${SRC_DIR}
+
+wget ${SRC_URL}${SRC_FILE}
+tar -xf ${SRC_FILE} -C ${SRC_DIR} --strip 1
+rm ${SRC_FILE}
+
+### Fetch gentoo patchset
+mkdir ${GPATCH_DIR}
+
+wget ${GPATCH_BASE_URL}${GPATCH_BASE_FILE}
+tar -xf ${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
+rm ${GPATCH_BASE_FILE}
+
+wget ${GPATCH_BASE_URL}${GPATCH_EXTRAS_FILE}
+tar -xf ${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
+rm ${GPATCH_EXTRAS_FILE}
+
+### Apply gentoo patchset
+cd ${SRC_DIR}
+for patch in $(ls ../${GPATCH_DIR}/*.patch 2>/dev/null) 
+	do patch -t -p1 < $patch
+done
+cd ..
+
+### Clean up gentoo patchset
+rm -rf ${GPATCH_DIR}
+
+### Apply user patchset
+cd ${SRC_DIR}
+for patch in $(ls ../*.patch 2>/dev/null)
+	do patch -t -p1 < $patch
+done
+cd ..
+
+### Copy config into sources
+cp ${SRC_CONF} ${SRC_DIR}/${DST_CONF}
+ 
+### Kernel
+make -C ${SRC_DIR} -j$(nproc) ${DST_IMG}
+ 
+### DTB
+make -C ${SRC_DIR} -j$(nproc) ${DST_DTB} 
+
+### Modules
+DST_MOD_TAR=modules.tar.gz
+
+if [ $(grep CONFIG_MODULES=y ${SRC_DIR}/${DST_CONF}) ]
+	then
+		make modules -C ${SRC_DIR}
+		mkdir ${DST_MOD}
+		INSTALL_MOD_PATH=../${DST_MOD}/ make modules_installi
+        tar -czf ${DST_MOD_TAR} ${DST_MOD}
+fi
+
+### Copy files to output
+mkdir ${DST_DIR}
+
+if [ -e ${SRC_DIR}/arch/${ARCH}/boot/${DST_IMG} ]
+then cp ${SRC_DIR}/arch/${ARCH}/boot/${DST_IMG} ${DST_DIR}/${DST_PRE}_${DST_IMG}
+fi
+
+if [ -e ${SRC_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ]
+then cp ${SRC_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ${DST_DIR}/${DST_PRE}_${DST_DTB}
+fi
+
+if [ -e ${DST_MOD_TAR} ]
+then cp ${DST_MOD_TAR} ${DST_DIR}/${DST_PRE}_${DST_MOD_TAR}
+fi

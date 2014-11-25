@@ -23,7 +23,7 @@ DST_DTB="bcm2835-rpi-b.dtb"
 DST_MOD="modules"
 DST_DIR="output"
 DST_CONF=".config"
-DST_PRE="$(date '+%Y%m%d')_$(date '+%H-%M-%S')_3.17.5"
+DST_PRE="$(date '+%Y%m%d')_$(date '+%H-%M-%S')_3.17.2"
 
 #####################
 # Script            #

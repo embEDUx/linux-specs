@@ -48,7 +48,7 @@ echo "Extracting ${GPATCH_BASE_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
 
 echo "Downloading ${GPATCH_EXTRAS_FILE} from ${KERNEL_URL}"
-wget ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}
+wget -N ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}
 
 echo "Extracting ${GPATCH_EXTRAS_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}

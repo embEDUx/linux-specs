@@ -5,7 +5,7 @@
 #####################
 
 ### Sources
-SRC_DIR="/var/tmp/embedux/downloads"
+SRC_DIR="/var/tmp/embedux/download"
 KERNEL_URL="http://www.kernel.org/pub/linux/kernel/v3.x"
 KERNEL_FILE="linux-3.17.tar.gz"
 

@@ -18,13 +18,10 @@ KERNEL_URL=(`git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}'`)
 KERNEL_DIR="linux"
 
 echo "Cloning kernel from '${KERNEL_URL}'"
-git clone ${KERNEL_URL} ${KERNEL_DIR}
-
-cd ${KERNEL_DIR}
-echo "Checking out kernel branch '${KERNEL_VERSION}'"
-git checkout ${KERNEL_VERSION}
+git clone -b ${KERNEL_VERSION} --depth 1 --single-branch ${KERNEL_URL}
 
 echo "Executing build script for kernel branch"
+cd ${KERNEL_DIR}
 ./build
 cd ..
 

@@ -44,7 +44,7 @@ cp ${KERNEL_CONFIG} ${KERNEL_DIR}/${KERNEL_CONFIG}
 echo "Building ${KERNEL_IMG}"
 make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_IMG}
  
-### DTBi
+### DTB
 echo "Building ${KERNEL_DTB}"
 make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_DTB} 
 

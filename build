@@ -41,12 +41,12 @@ echo "Copying kernel ${KERNEL_CONFIG} to ${KERNEL_DIR}"
 cp ${KERNEL_CONFIG} ${KERNEL_DIR}/${KERNEL_CONFIG}
  
 ### Kernel
-echo "Building ${DST_IMG}"
-make -C ${KERNEL_DIR} -j$(nproc) ${DST_IMG}
+echo "Building ${KERNEL_IMG}"
+make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_IMG}
  
 ### DTBi
-echo "Building ${DST_DTB}"
-make -C ${KERNEL_DIR} -j$(nproc) ${DST_DTB} 
+echo "Building ${KERNEL_DTB}"
+make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_DTB} 
 
 ### Modules
 MODULES_DIR="modules"

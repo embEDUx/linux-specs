@@ -6,26 +6,9 @@
 
 ### Sources
 KERNEL_VERSION="3.17.2"
-
-# SRC_URL="https://www.kernel.org/pub/linux/kernel/v3.x/"
-# SRC_FILE="linux-3.17.tar.gz"
-# SRC_DIR="linux"
-# SRC_CONF=".config"
-# SRC_ARCH="arm"
-# 
-# ### Patches
-# GPATCH_BASE_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs/"
-# GPATCH_BASE_FILE="genpatches-3.17-5.base.tar.xz"
-# GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
-# GPATCH_DIR="gentoo-patches"
-# 
-# ### Outputs
-# DST_IMG="zImage"
-# DST_DTB="bcm2835-rpi-b.dtb"
-# DST_TAR="kernel.tar"
-# DST_DIR="output"
-# DST_CONF=".config"
-# DST_PRE="$(date '+%Y%m%d')_$(date '+%H-%M-%S')_3.17.2"
+KERNEL_CONFIG=".config"
+KERNEL_IMG="zImage"
+KERNEL_DTB="bcm2835-rpi-b.dtb"
 
 #####################
 # Script            #
@@ -42,56 +25,55 @@ git checkout ${KERNEL_VERSION}
 
 echo "Executing build script for kernel branch"
 ./build
-
 cd ..
 
-
-
 ### Apply user patchset
+echo "Applying user patches"
 cd ${KERNEL_DIR}
 for patch in $(ls ../*.patch 2>/dev/null)
 	do patch -t -p1 < $patch
 done
 cd ..
 
+### Copy config into sources
+echo "Copying kernel ${KERNEL_CONFIG} to ${KERNEL_DIR}"
+cp ${KERNEL_CONFIG} ${KERNEL_DIR}/${KERNEL_CONFIG}
+ 
+### Kernel
+echo "Building ${DST_IMG}"
+make -C ${KERNEL_DIR} -j$(nproc) ${DST_IMG}
+ 
+### DTBi
+echo "Building ${DST_DTB}"
+make -C ${KERNEL_DIR} -j$(nproc) ${DST_DTB} 
 
-# TODO BUILD KERNEL
+### Modules
+MODULES_DIR="modules"
+MODULES_TAR="modules.tar.gz"
 
-# ### Copy config into sources
-# cp ${SRC_CONF} ${SRC_DIR}/${DST_CONF}
-#  
-# ### Kernel
-# make -C ${SRC_DIR} -j$(nproc) ${DST_IMG}
-#  
-# ### DTB
-# make -C ${SRC_DIR} -j$(nproc) ${DST_DTB} 
-# 
-# ### Modules
-# DST_MOD="modules"
-# DST_MOD_TAR=modules.tar.gz
-# 
-# if [ $(grep CONFIG_MODULES=y ${SRC_DIR}/${DST_CONF}) ]
-# 	then
-# 		make modules -C ${SRC_DIR}
-# 		mkdir ${DST_MOD}
-# 		INSTALL_MOD_PATH="../${DST_MOD}" make modules_install -C ${SRC_DIR}
-#     tar -czf ${DST_MOD_TAR} ${DST_MOD}
-#     rm -rf ${DST_MOD}
-# fi
-# 
-# ### Copy files to output
-# mkdir ${DST_DIR}
-# 
-# if [ -e ${SRC_DIR}/arch/${ARCH}/boot/${DST_IMG} ]
-#   then tar -cf ${DST_DIR}/${DST_PRE}_${DST_TAR} -C ${SRC_DIR}/arch/${ARCH}/boot ${DST_IMG}
-# fi
-# 
-# if [ -e ${SRC_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ]
-#   then tar -rf ${DST_DIR}/${DST_PRE}_${DST_TAR} -C ${SRC_DIR}/arch/${ARCH}/boot/dts ${DST_DTB}
-# fi
-# 
-# if [ -e ${DST_MOD_TAR} ]
-#   then mv ${DST_MOD_TAR} ${DST_DIR}/${DST_PRE}_${DST_MOD_TAR}
-# fi
-# 
-# rm -rf ${SRC_DIR}
+if [ $(grep CONFIG_MODULES=y ${KERNEL_DIR}/${DST_CONF}) ]
+	then
+    echo "Building kernel modules"
+		make modules -C ${KERNEL_DIR}
+		mkdir ${MODULES_DIR}
+    echo "Packing kernel modules from ${MODULES_DIR} in ${MODULES_TAR}"
+		INSTALL_MOD_PATH="${MODULES_DIR}" make modules_install -C ${KERNEL_DIR}
+    tar -czf ${MODULES_TAR} ${MODULES_DIR}
+fi
+
+### Prepare output
+OUTPUT_DIR="output"
+OUTPUT_KERNEL="$(git rev-parse HEAD)_$(git rev-parse --abbrev-ref HEAD)_linux.tar.gz"
+OUTPUT_MODULES="$(git rev-parse HEAD)_$(git rev-parse --abbrev-ref HEAD)_modules.tar.gz"
+ARCH="$(arch)"
+
+mkdir ${OUTPUT_DIR}
+
+echo "Providing output in ${OUTPUT_DIR}"
+
+tar -czf ${OUTPUT_DIR}/${OUTPUT_KERNEL} -C ${KERNEL_DIR}/arch/${ARCH}/boot ${DST_IMG} \ 
+    -C ${KERNEL_DIR}/arch/${ARCH}/boot/dts ${DST_DTB}
+
+if [ -e ${MODULES_TAR} ]
+  then mv ${MODULES_TAR} ${OUTPUT_DIR}/${OUTPUT_MODULES}
+fi

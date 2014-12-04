@@ -14,8 +14,8 @@ ARCH="arm"
 #####################
 # Script            #
 #####################
-ERNEL_URL=(`git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}'`)
-ERNEL_DIR="linux"
+KERNEL_URL=(`git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}'`)
+KERNEL_DIR="linux"
 
 echo "Cloning kernel from '${KERNEL_URL}'"
 git clone ${KERNEL_URL} ${KERNEL_DIR}

@@ -8,6 +8,7 @@
 SRC_DIR="/var/tmp/embedux/download"
 KERNEL_URL="http://www.kernel.org/pub/linux/kernel/v3.x"
 KERNEL_FILE="linux-3.17.tar.gz"
+KERNEL_SHA="sha256sums.asc"
 
 ### Patches
 GPATCH_DIR="gentoo-patches"
@@ -23,14 +24,14 @@ GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
 mkdir -p ${SRC_DIR}
 
 ### Kernel sources and patches
-SHASUM_FILE="sha256sums.asc"
 
+echo "Downloading ${KERNEL_SHA} from ${KERNEL_URL}"
+wget -N ${KERNEL_URL}/${KERNEL_SHA} -P ${SRC_DIR}
 echo "Downloading ${KERNEL_FILE} from ${KERNEL_URL}"
-wget -N ${KERNEL_URL}/${SHASUM_FILE} -P ${SRC_DIR}
 wget -N ${KERNEL_URL}/${KERNEL_FILE} -P ${SRC_DIR}
 
 echo "Checking sha265 hash on ${KERNEL_FILE}"
-if [[ -z $(grep `shasum -a 256 ${SRC_DIR}/${KERNEL_FILE}` ${SRC_DIR}/${SHASUM_FILE}) ]]
+if [[ -z $(grep `shasum -a 256 ${SRC_DIR}/${KERNEL_FILE}` ${SRC_DIR}/${KERNEL_SHA}) ]]
   then exit
 fi
 

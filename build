@@ -5,100 +5,93 @@
 #####################
 
 ### Sources
-SRC_URL="https://www.kernel.org/pub/linux/kernel/v3.x/"
-SRC_FILE="linux-3.17.tar.gz"
-SRC_DIR="linux"
-SRC_CONF=".config"
-SRC_ARCH="arm"
+KERNEL_VERSION="3.17.2"
 
-### Patches
-GPATCH_BASE_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs/"
-GPATCH_BASE_FILE="genpatches-3.17-5.base.tar.xz"
-GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
-GPATCH_DIR="gentoo-patches"
-
-### Outputs
-DST_IMG="zImage"
-DST_DTB="bcm2835-rpi-b.dtb"
-DST_TAR="kernel.tar"
-DST_DIR="output"
-DST_CONF=".config"
-DST_PRE="$(date '+%Y%m%d')_$(date '+%H-%M-%S')_3.17.2"
+# SRC_URL="https://www.kernel.org/pub/linux/kernel/v3.x/"
+# SRC_FILE="linux-3.17.tar.gz"
+# SRC_DIR="linux"
+# SRC_CONF=".config"
+# SRC_ARCH="arm"
+# 
+# ### Patches
+# GPATCH_BASE_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs/"
+# GPATCH_BASE_FILE="genpatches-3.17-5.base.tar.xz"
+# GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
+# GPATCH_DIR="gentoo-patches"
+# 
+# ### Outputs
+# DST_IMG="zImage"
+# DST_DTB="bcm2835-rpi-b.dtb"
+# DST_TAR="kernel.tar"
+# DST_DIR="output"
+# DST_CONF=".config"
+# DST_PRE="$(date '+%Y%m%d')_$(date '+%H-%M-%S')_3.17.2"
 
 #####################
 # Script            #
 #####################
+KERNEL_URL=(`git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}'`)
+KERNEL_DIR="linux"
 
-### Fetch linux sources
-mkdir ${SRC_DIR}
+echo "Cloning kernel from '${KERNEL_URL}'"
+git clone ${KERNEL_URL} ${KERNEL_DIR}
 
-wget ${SRC_URL}${SRC_FILE}
-tar -xf ${SRC_FILE} -C ${SRC_DIR} --strip 1
-rm ${SRC_FILE}
+cd ${KERNEL_DIR}
+echo "Checking out kernel branch '${KERNEL_VERSION}'"
+git checkout ${KERNEL_VERSION}
 
-### Fetch gentoo patchset
-mkdir ${GPATCH_DIR}
+echo "Executing build script for kernel branch"
+./build
 
-wget ${GPATCH_BASE_URL}${GPATCH_BASE_FILE}
-tar -xf ${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
-rm ${GPATCH_BASE_FILE}
-
-wget ${GPATCH_BASE_URL}${GPATCH_EXTRAS_FILE}
-tar -xf ${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
-rm ${GPATCH_EXTRAS_FILE}
-
-### Apply gentoo patchset
-cd ${SRC_DIR}
-for patch in $(ls ../${GPATCH_DIR}/*.patch 2>/dev/null) 
-	do patch -t -p1 < $patch
-done
 cd ..
 
-### Clean up gentoo patchset
-rm -rf ${GPATCH_DIR}
+
 
 ### Apply user patchset
-cd ${SRC_DIR}
+cd ${KERNEL_DIR}
 for patch in $(ls ../*.patch 2>/dev/null)
 	do patch -t -p1 < $patch
 done
 cd ..
 
-### Copy config into sources
-cp ${SRC_CONF} ${SRC_DIR}/${DST_CONF}
- 
-### Kernel
-make -C ${SRC_DIR} -j$(nproc) ${DST_IMG}
- 
-### DTB
-make -C ${SRC_DIR} -j$(nproc) ${DST_DTB} 
 
-### Modules
-DST_MOD="modules"
-DST_MOD_TAR=modules.tar.gz
+# TODO BUILD KERNEL
 
-if [ $(grep CONFIG_MODULES=y ${SRC_DIR}/${DST_CONF}) ]
-	then
-		make modules -C ${SRC_DIR}
-		mkdir ${DST_MOD}
-		INSTALL_MOD_PATH="../${DST_MOD}" make modules_install -C ${SRC_DIR}
-    tar -czf ${DST_MOD_TAR} ${DST_MOD}
-    rm -rf ${DST_MOD}
-fi
-
-### Copy files to output
-mkdir ${DST_DIR}
-
-if [ -e ${SRC_DIR}/arch/${ARCH}/boot/${DST_IMG} ]
-  then tar -cf ${DST_DIR}/${DST_PRE}_${DST_TAR} -C ${SRC_DIR}/arch/${ARCH}/boot ${DST_IMG}
-fi
-
-if [ -e ${SRC_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ]
-  then tar -rf ${DST_DIR}/${DST_PRE}_${DST_TAR} -C ${SRC_DIR}/arch/${ARCH}/boot/dts ${DST_DTB}
-fi
-
-if [ -e ${DST_MOD_TAR} ]
-  then mv ${DST_MOD_TAR} ${DST_DIR}/${DST_PRE}_${DST_MOD_TAR}
-fi
-
-rm -rf ${SRC_DIR}
+# ### Copy config into sources
+# cp ${SRC_CONF} ${SRC_DIR}/${DST_CONF}
+#  
+# ### Kernel
+# make -C ${SRC_DIR} -j$(nproc) ${DST_IMG}
+#  
+# ### DTB
+# make -C ${SRC_DIR} -j$(nproc) ${DST_DTB} 
+# 
+# ### Modules
+# DST_MOD="modules"
+# DST_MOD_TAR=modules.tar.gz
+# 
+# if [ $(grep CONFIG_MODULES=y ${SRC_DIR}/${DST_CONF}) ]
+# 	then
+# 		make modules -C ${SRC_DIR}
+# 		mkdir ${DST_MOD}
+# 		INSTALL_MOD_PATH="../${DST_MOD}" make modules_install -C ${SRC_DIR}
+#     tar -czf ${DST_MOD_TAR} ${DST_MOD}
+#     rm -rf ${DST_MOD}
+# fi
+# 
+# ### Copy files to output
+# mkdir ${DST_DIR}
+# 
+# if [ -e ${SRC_DIR}/arch/${ARCH}/boot/${DST_IMG} ]
+#   then tar -cf ${DST_DIR}/${DST_PRE}_${DST_TAR} -C ${SRC_DIR}/arch/${ARCH}/boot ${DST_IMG}
+# fi
+# 
+# if [ -e ${SRC_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ]
+#   then tar -rf ${DST_DIR}/${DST_PRE}_${DST_TAR} -C ${SRC_DIR}/arch/${ARCH}/boot/dts ${DST_DTB}
+# fi
+# 
+# if [ -e ${DST_MOD_TAR} ]
+#   then mv ${DST_MOD_TAR} ${DST_DIR}/${DST_PRE}_${DST_MOD_TAR}
+# fi
+# 
+# rm -rf ${SRC_DIR}

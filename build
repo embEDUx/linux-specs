@@ -5,13 +5,14 @@
 #####################
 
 ### Sources
-SRC_DIR="src"
-KERNEL_DIR="linux"
+SRC_DIR="/var/tmp"
+KERNEL_URL="http://www.kernel.org/pub/linux/kernel/v3.x"
 KERNEL_FILE="linux-3.17.tar.gz"
 # SRC_CONF=".config"
 
 ### Patches
 GPATCH_DIR="gentoo-patches"
+GPATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
 GPATCH_BASE_FILE="genpatches-3.17-5.base.tar.xz"
 GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
 
@@ -27,11 +28,36 @@ GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
 #####################
 
 ### Kernel sources and patches.
+if [ ! -e ${SRC_DIR}/${KERNEL_FILE} ]
+  then
+    echo "${KERNEL_FILE} not found in ${SRC_DIR}"
+    echo "Downloading ${KERNEL_FILE} from ${KERNEL_URL}"
+    wget ${KERNEL_URL}/${KERNEL_FILE} -P ${SRC_DIR}
+fi
+
+echo "Extraxing ${KERNEL_FILE}"
 tar -xf ${SRC_DIR}/${KERNEL_FILE} --strip 1
 
 ### Gentoo patchset
 mkdir ${GPATCH_DIR}
+
+if [ ! -e {SRC_DIR}/${GPATCH_BASE_FILE} ]
+  then
+    echo "${GPATCH_BASE_FILE} not found in ${SRC_DIR}"
+    echo "Downloading ${GPATCH_BASE_FILE} from ${KERNEL_URL}"
+    wget ${GPATCH_URL}/${GPATCH_BASE_FILE} -P ${SRC_DIR}
+fi
+
+echo "Extraxing ${GPTACH_BASE_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
+
+if [ ! -e {SRC_DIR}/${GPATCH_EXTRAS_FILE} ]
+  then
+    echo "${GPATCH_EXTRAS_FILE} not found in ${SRC_DIR}"
+    echo "Downloading ${GPATCH_EXTRAS_FILE} from ${KERNEL_URL}"
+    wget ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}
+fi
+
 tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
 
 ### Apply gentoo patchset

@@ -9,43 +9,44 @@ KERNEL_VERSION="3.17.2"
 KERNEL_CONFIG=".config"
 KERNEL_IMG="zImage"
 KERNEL_DTB="bcm2835-rpi-b.dtb"
+ARCH="arm"
 
-######################
-## Script            #
-######################
-KERNEL_URL=(`git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}'`)
-KERNEL_DIR="linux"
-#
-#echo "Cloning kernel from '${KERNEL_URL}'"
-#git clone ${KERNEL_URL} ${KERNEL_DIR}
-#
-#cd ${KERNEL_DIR}
-#echo "Checking out kernel branch '${KERNEL_VERSION}'"
-#git checkout ${KERNEL_VERSION}
-#
-#echo "Executing build script for kernel branch"
-#./build
-#cd ..
-#
-#### Apply user patchset
-#echo "Applying user patches"
-#cd ${KERNEL_DIR}
-#for patch in $(ls ../*.patch 2>/dev/null)
-#	do patch -t -p1 < $patch
-#done
-#cd ..
-#
-#### Copy config into sources
-#echo "Copying kernel ${KERNEL_CONFIG} to ${KERNEL_DIR}"
-#cp ${KERNEL_CONFIG} ${KERNEL_DIR}/${KERNEL_CONFIG}
-# 
-#### Kernel
-#echo "Building ${DST_IMG}"
-#make -C ${KERNEL_DIR} -j$(nproc) ${DST_IMG}
-# 
-#### DTBi
-#echo "Building ${DST_DTB}"
-#make -C ${KERNEL_DIR} -j$(nproc) ${DST_DTB} 
+#####################
+# Script            #
+#####################
+ERNEL_URL=(`git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}'`)
+ERNEL_DIR="linux"
+
+echo "Cloning kernel from '${KERNEL_URL}'"
+git clone ${KERNEL_URL} ${KERNEL_DIR}
+
+cd ${KERNEL_DIR}
+echo "Checking out kernel branch '${KERNEL_VERSION}'"
+git checkout ${KERNEL_VERSION}
+
+echo "Executing build script for kernel branch"
+./build
+cd ..
+
+### Apply user patchset
+echo "Applying user patches"
+cd ${KERNEL_DIR}
+for patch in $(ls ../*.patch 2>/dev/null)
+	do patch -t -p1 < $patch
+done
+cd ..
+
+### Copy config into sources
+echo "Copying kernel ${KERNEL_CONFIG} to ${KERNEL_DIR}"
+cp ${KERNEL_CONFIG} ${KERNEL_DIR}/${KERNEL_CONFIG}
+ 
+### Kernel
+echo "Building ${DST_IMG}"
+make -C ${KERNEL_DIR} -j$(nproc) ${DST_IMG}
+ 
+### DTBi
+echo "Building ${DST_DTB}"
+make -C ${KERNEL_DIR} -j$(nproc) ${DST_DTB} 
 
 ### Modules
 MODULES_DIR="modules"
@@ -65,7 +66,6 @@ fi
 OUTPUT_DIR="output"
 OUTPUT_KERNEL="$(git rev-parse HEAD)_$(git rev-parse --abbrev-ref HEAD)_linux.tar.gz"
 OUTPUT_MODULES="$(git rev-parse HEAD)_$(git rev-parse --abbrev-ref HEAD)_modules.tar.gz"
-ARCH="arm"
 
 mkdir -p ${OUTPUT_DIR}
 

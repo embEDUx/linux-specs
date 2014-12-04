@@ -27,7 +27,7 @@ GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
 #####################
 
 ### Kernel sources and patches.
-tar -xf ${SRC_DIR}/${KERNEL_FILE} -C --strip 1
+tar -xf ${SRC_DIR}/${KERNEL_FILE} --strip 1
 
 ### Gentoo patchset
 mkdir ${GPATCH_DIR}
@@ -35,7 +35,7 @@ tar -xf ${SRC_DIR}/${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
 tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
 
 ### Apply gentoo patchset
-for patch in $(ls ../${GPATCH_DIR}/*.patch 2>/dev/null) 
+for patch in $(ls ${GPATCH_DIR}/*.patch 2>/dev/null) 
 	do patch -t -p1 < $patch
 done
 

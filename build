@@ -5,10 +5,9 @@
 #####################
 
 ### Sources
-SRC_DIR="/var/tmp"
+SRC_DIR="/var/tmp/embedux/downloads"
 KERNEL_URL="http://www.kernel.org/pub/linux/kernel/v3.x"
 KERNEL_FILE="linux-3.17.tar.gz"
-# SRC_CONF=".config"
 
 ### Patches
 GPATCH_DIR="gentoo-patches"
@@ -16,18 +15,14 @@ GPATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
 GPATCH_BASE_FILE="genpatches-3.17-5.base.tar.xz"
 GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
 
-### Outputs
-# DST_DIR="output"
-# DST_IMG="zImage"
-# DST_DTB="am335x-boneblack.dtb"
-# DST_CONF=".config"
-# DST_PRE="$(date '+%Y%m%d')_$(date '+%H-%M-%S')_3.17.2"
-
 #####################
 # Script            #
 #####################
 
-### Kernel sources and patches.
+### Prepare folder
+mkdir -p ${SRC_DIR}
+
+### Kernel sources and patches
 if [ ! -e ${SRC_DIR}/${KERNEL_FILE} ]
   then
     echo "${KERNEL_FILE} not found in ${SRC_DIR}"
@@ -62,55 +57,8 @@ echo "Extracting ${GPATCH_EXTRAS_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
 
 ### Apply gentoo patchset
+echo "Applying gentoo patches"
 for patch in $(ls ${GPATCH_DIR}/*.patch 2>/dev/null) 
 	do patch -t -p1 < $patch
 done
 
-### Clean up gentoo patchset
-rm -rf ${GPATCH_DIR}
-
-# ### Apply user patchset
-# cd ${KERNEL_DIR}
-# for patch in $(ls ../*.patch 2>/dev/null)
-# 	do patch -t -p1 < $patch
-# done
-# cd ..
-# 
-# ### Copy config into sources
-# cp ${SRC_CONF} ${KERNEL_DIR}/${DST_CONF}
-#  
-# ### Kernel
-# make -C ${KERNEL_DIR} -j$(nproc) ${DST_IMG}
-#  
-# ### DTB
-# make -C ${KERNEL_DIR} -j$(nproc) ${DST_DTB} 
-# 
-# ### Modules
-# DST_MOD="modules"
-# DST_MOD_TAR=modules.tar.gz
-# 
-# if [ $(grep CONFIG_MODULES=y ${KERNEL_DIR}/${DST_CONF}) ]
-# 	then
-# 		make modules -C ${KERNEL_DIR}
-# 		mkdir ${DST_MOD}
-# 		INSTALL_MOD_PATH="../${DST_MOD}" make modules_install -C ${KERNEL_DIR}
-#     tar -czf ${DST_MOD_TAR} ${DST_MOD}
-#     rm -rf ${DST_MOD}
-# fi
-# 
-# ### Copy files to output
-# mkdir ${DST_DIR}
-# 
-# if [ -e ${KERNEL_DIR}/arch/${ARCH}/boot/${DST_IMG} ]
-#   then cp ${KERNEL_DIR}/arch/${ARCH}/boot/${DST_IMG} ${DST_DIR}/${DST_PRE}_${DST_IMG}
-# fi
-# 
-# if [ -e ${KERNEL_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ]
-#   then cp ${KERNEL_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ${DST_DIR}/${DST_PRE}_${DST_DTB}
-# fi
-# 
-# if [ -e ${DST_MOD_TAR} ]
-#   then mv ${DST_MOD_TAR} ${DST_DIR}/${DST_PRE}_${DST_MOD_TAR}
-# fi
-# 
-# rm -rf ${KERNEL_DIR}

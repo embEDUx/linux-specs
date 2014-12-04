@@ -5,6 +5,7 @@
 #####################
 
 ### Sources
+SRC_DIR="src"
 KERNEL_DIR="linux"
 KERNEL_FILE="linux-3.17.tar.gz"
 # SRC_CONF=".config"
@@ -26,20 +27,17 @@ GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
 #####################
 
 ### Kernel sources and patches.
-mkdir ${KERNEL_DIR}
-tar -xf ${KERNEL_FILE} -C ${KERNEL_DIR} --strip 1
+tar -xf ${SRC_DIR}/${KERNEL_FILE} -C --strip 1
 
 ### Gentoo patchset
 mkdir ${GPATCH_DIR}
-tar -xf ${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
-tar -xf ${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
+tar -xf ${SRC_DIR}/${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
+tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
 
 ### Apply gentoo patchset
-cd ${KERNEL_DIR}
 for patch in $(ls ../${GPATCH_DIR}/*.patch 2>/dev/null) 
 	do patch -t -p1 < $patch
 done
-cd ..
 
 ### Clean up gentoo patchset
 rm -rf ${GPATCH_DIR}

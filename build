@@ -58,7 +58,7 @@ if [ $(grep CONFIG_MODULES=y ${KERNEL_DIR}/${KERNEL_CONFIG}) ]
 		make modules -C ${KERNEL_DIR}
 		mkdir ${MODULES_DIR}
     echo "Packing kernel modules from ${MODULES_DIR} in ${MODULES_TAR}"
-		INSTALL_MOD_PATH="${MODULES_DIR}" make modules_install -C ${KERNEL_DIR}
+		INSTALL_MOD_PATH="../${MODULES_DIR}" make modules_install -C ${KERNEL_DIR}
     tar -czf ${MODULES_TAR} ${MODULES_DIR}
 fi
 

@@ -1,0 +1,91 @@
+#! /bin/bash -e
+
+#####################
+# Configuration     # 							     
+#####################
+
+### Sources
+KERNEL_DIR="linux"
+KERNEL_FILE="linux-3.17.tar.gz"
+# SRC_CONF=".config"
+
+### Patches
+GPATCH_DIR="gentoo-patches"
+GPATCH_BASE_FILE="genpatches-3.17-5.base.tar.xz"
+GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
+
+### Outputs
+# DST_DIR="output"
+# DST_IMG="zImage"
+# DST_DTB="am335x-boneblack.dtb"
+# DST_CONF=".config"
+# DST_PRE="$(date '+%Y%m%d')_$(date '+%H-%M-%S')_3.17.2"
+
+#####################
+# Script            #
+#####################
+
+### Kernel sources and patches.
+mkdir ${KERNEL_DIR}
+tar -xf ${KERNEL_FILE} -C ${KERNEL_DIR} --strip 1
+
+### Gentoo patchset
+mkdir ${GPATCH_DIR}
+tar -xf ${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
+tar -xf ${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
+
+### Apply gentoo patchset
+cd ${KERNEL_DIR}
+for patch in $(ls ../${GPATCH_DIR}/*.patch 2>/dev/null) 
+	do patch -t -p1 < $patch
+done
+cd ..
+
+### Clean up gentoo patchset
+rm -rf ${GPATCH_DIR}
+
+# ### Apply user patchset
+# cd ${KERNEL_DIR}
+# for patch in $(ls ../*.patch 2>/dev/null)
+# 	do patch -t -p1 < $patch
+# done
+# cd ..
+# 
+# ### Copy config into sources
+# cp ${SRC_CONF} ${KERNEL_DIR}/${DST_CONF}
+#  
+# ### Kernel
+# make -C ${KERNEL_DIR} -j$(nproc) ${DST_IMG}
+#  
+# ### DTB
+# make -C ${KERNEL_DIR} -j$(nproc) ${DST_DTB} 
+# 
+# ### Modules
+# DST_MOD="modules"
+# DST_MOD_TAR=modules.tar.gz
+# 
+# if [ $(grep CONFIG_MODULES=y ${KERNEL_DIR}/${DST_CONF}) ]
+# 	then
+# 		make modules -C ${KERNEL_DIR}
+# 		mkdir ${DST_MOD}
+# 		INSTALL_MOD_PATH="../${DST_MOD}" make modules_install -C ${KERNEL_DIR}
+#     tar -czf ${DST_MOD_TAR} ${DST_MOD}
+#     rm -rf ${DST_MOD}
+# fi
+# 
+# ### Copy files to output
+# mkdir ${DST_DIR}
+# 
+# if [ -e ${KERNEL_DIR}/arch/${ARCH}/boot/${DST_IMG} ]
+#   then cp ${KERNEL_DIR}/arch/${ARCH}/boot/${DST_IMG} ${DST_DIR}/${DST_PRE}_${DST_IMG}
+# fi
+# 
+# if [ -e ${KERNEL_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ]
+#   then cp ${KERNEL_DIR}/arch/${ARCH}/boot/dts/${DST_DTB} ${DST_DIR}/${DST_PRE}_${DST_DTB}
+# fi
+# 
+# if [ -e ${DST_MOD_TAR} ]
+#   then mv ${DST_MOD_TAR} ${DST_DIR}/${DST_PRE}_${DST_MOD_TAR}
+# fi
+# 
+# rm -rf ${KERNEL_DIR}

@@ -23,11 +23,15 @@ GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
 mkdir -p ${SRC_DIR}
 
 ### Kernel sources and patches
-if [ ! -e ${SRC_DIR}/${KERNEL_FILE} ]
-  then
-    echo "${KERNEL_FILE} not found in ${SRC_DIR}"
-    echo "Downloading ${KERNEL_FILE} from ${KERNEL_URL}"
-    wget ${KERNEL_URL}/${KERNEL_FILE} -P ${SRC_DIR}
+SHASUM_FILE="sha256sums.asc"
+
+echo "Downloading ${KERNEL_FILE} from ${KERNEL_URL}"
+wget -N ${KERNEL_URL}/${SHASUM_FILE} -P ${SRC_DIR}
+wget -N ${KERNEL_URL}/${KERNEL_FILE} -P ${SRC_DIR}
+
+echo "Checking sha265 hash on ${KERNEL_FILE}"
+if [[ -z $(grep `shasum -a 256 ${SRC_DIR}/${KERNEL_FILE}` ${SRC_DIR}/${SHASUM_FILE}) ]]
+  then exit
 fi
 
 echo "Extracting ${KERNEL_FILE}"
@@ -36,22 +40,14 @@ tar -xf ${SRC_DIR}/${KERNEL_FILE} --strip 1
 ### Gentoo patchset
 mkdir ${GPATCH_DIR}
 
-if [ ! -e ${SRC_DIR}/${GPATCH_BASE_FILE} ]
-  then
-    echo "${GPATCH_BASE_FILE} not found in ${SRC_DIR}"
-    echo "Downloading ${GPATCH_BASE_FILE} from ${KERNEL_URL}"
-    wget ${GPATCH_URL}/${GPATCH_BASE_FILE} -P ${SRC_DIR}
-fi
+echo "Downloading ${GPATCH_BASE_FILE} from ${KERNEL_URL}"
+wget -N ${GPATCH_URL}/${GPATCH_BASE_FILE} -P ${SRC_DIR}
 
 echo "Extracting ${GPATCH_BASE_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
 
-if [ ! -e ${SRC_DIR}/${GPATCH_EXTRAS_FILE} ]
-  then
-    echo "${GPATCH_EXTRAS_FILE} not found in ${SRC_DIR}"
-    echo "Downloading ${GPATCH_EXTRAS_FILE} from ${KERNEL_URL}"
-    wget ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}
-fi
+echo "Downloading ${GPATCH_EXTRAS_FILE} from ${KERNEL_URL}"
+wget ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}
 
 echo "Extracting ${GPATCH_EXTRAS_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
@@ -61,4 +57,3 @@ echo "Applying gentoo patches"
 for patch in $(ls ${GPATCH_DIR}/*.patch 2>/dev/null) 
 	do patch -t -p1 < $patch
 done
-

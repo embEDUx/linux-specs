@@ -35,29 +35,30 @@ if [ ! -e ${SRC_DIR}/${KERNEL_FILE} ]
     wget ${KERNEL_URL}/${KERNEL_FILE} -P ${SRC_DIR}
 fi
 
-echo "Extraxing ${KERNEL_FILE}"
+echo "Extracting ${KERNEL_FILE}"
 tar -xf ${SRC_DIR}/${KERNEL_FILE} --strip 1
 
 ### Gentoo patchset
 mkdir ${GPATCH_DIR}
 
-if [ ! -e {SRC_DIR}/${GPATCH_BASE_FILE} ]
+if [ ! -e ${SRC_DIR}/${GPATCH_BASE_FILE} ]
   then
     echo "${GPATCH_BASE_FILE} not found in ${SRC_DIR}"
     echo "Downloading ${GPATCH_BASE_FILE} from ${KERNEL_URL}"
     wget ${GPATCH_URL}/${GPATCH_BASE_FILE} -P ${SRC_DIR}
 fi
 
-echo "Extraxing ${GPTACH_BASE_FILE}"
+echo "Extracting ${GPATCH_BASE_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
 
-if [ ! -e {SRC_DIR}/${GPATCH_EXTRAS_FILE} ]
+if [ ! -e ${SRC_DIR}/${GPATCH_EXTRAS_FILE} ]
   then
     echo "${GPATCH_EXTRAS_FILE} not found in ${SRC_DIR}"
     echo "Downloading ${GPATCH_EXTRAS_FILE} from ${KERNEL_URL}"
     wget ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}
 fi
 
+echo "Extracting ${GPATCH_EXTRAS_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
 
 ### Apply gentoo patchset

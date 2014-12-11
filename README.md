@@ -7,5 +7,3 @@
 * 9001-Start-GPIO-numeration-at-zero.patch 
  
     Gpios start at gpio0 intead of false implemented gpio202
-
-

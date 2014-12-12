@@ -1,0 +1,76 @@
+#! /bin/bash -e
+
+#####################
+# Configuration     #                    
+#####################
+
+### Sources
+KERNEL_VERSION="3.17.2"
+KERNEL_CONFIG=".config"
+KERNEL_IMG="zImage"
+KERNEL_DTB="imx6q-cm-fx6.dtb"
+ARCH="arm"
+
+#####################
+# Script            #
+#####################
+KERNEL_URL=(`git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}'`)
+KERNEL_DIR="linux"
+
+echo "Cloning kernel from '${KERNEL_URL}'"
+git clone -b ${KERNEL_VERSION} --depth 1 --single-branch ${KERNEL_URL}
+
+echo "Executing build script for kernel branch"
+cd ${KERNEL_DIR}
+./build
+cd ..
+
+### Apply user patchset
+echo "Applying user patches"
+cd ${KERNEL_DIR}
+for patch in $(ls ../*.patch 2>/dev/null)
+  do patch -t -p1 < $patch
+done
+cd ..
+
+### Copy config into sources
+echo "Copying kernel ${KERNEL_CONFIG} to ${KERNEL_DIR}"
+cp ${KERNEL_CONFIG} ${KERNEL_DIR}/${KERNEL_CONFIG}
+
+### Kernel
+echo "Building ${KERNEL_IMG}"
+make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_IMG}
+
+### DTB
+echo "Building ${KERNEL_DTB}"
+make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_DTB}
+
+### Modules
+MODULES_DIR="modules"
+MODULES_TAR="modules.tar.gz"
+
+if [ $(grep CONFIG_MODULES=y ${KERNEL_DIR}/${KERNEL_CONFIG}) ]
+  then
+    echo "Building kernel modules"
+    make modules -C ${KERNEL_DIR}
+    mkdir ${MODULES_DIR}
+    echo "Packing kernel modules from ${MODULES_DIR} in ${MODULES_TAR}"
+    INSTALL_MOD_PATH="../${MODULES_DIR}" make modules_install -C ${KERNEL_DIR}
+    tar -czf ${MODULES_TAR} -C ${MODULES_DIR} .
+fi
+
+### Prepare output
+OUTPUT_DIR="output"
+OUTPUT_KERNEL="$(git rev-parse --abbrev-ref HEAD)_$(git rev-parse HEAD)_linux.tar.gz"
+OUTPUT_MODULES="$(git rev-parse --abbrev-ref HEAD)_$(git rev-parse HEAD)_${MODULES_TAR}"
+
+mkdir -p ${OUTPUT_DIR}
+
+echo "Providing output in ${OUTPUT_DIR}"
+
+tar -czf ${OUTPUT_DIR}/${OUTPUT_KERNEL} -C ${KERNEL_DIR}/arch/${ARCH}/boot ${KERNEL_IMG} -C dts ${KERNEL_DTB}
+
+if [ -e ${MODULES_TAR} ]
+  then mv ${MODULES_TAR} ${OUTPUT_DIR}/${OUTPUT_MODULES}
+fi
+

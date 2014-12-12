@@ -11,6 +11,7 @@ KERNEL_IMG="zImage"
 KERNEL_DTB="imx6q-cm-fx6.dtb"
 ARCH="arm"
 
+
 #####################
 # Script            #
 #####################

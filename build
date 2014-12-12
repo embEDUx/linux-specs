@@ -38,11 +38,11 @@ echo "Copying kernel ${KERNEL_CONFIG} to ${KERNEL_DIR}"
 cp ${KERNEL_CONFIG} ${KERNEL_DIR}/${KERNEL_CONFIG}
 
 ### Kernel
-echo "Building ${KERNEL_IMG}"
+echo "Building ${KERNEL_IMG} with $(nproc) jobs"
 make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_IMG}
 
 ### DTB
-echo "Building ${KERNEL_DTB}"
+echo "Building ${KERNEL_DTB} with $(nproc) jobs"
 make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_DTB}
 
 ### Modules

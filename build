@@ -61,8 +61,8 @@ fi
 
 ### Prepare output
 OUTPUT_DIR="output"
-OUTPUT_KERNEL="$(git rev-parse --abbrev-ref HEAD)_$(date '+%Y%m%d%H%M%S')_$(git rev-parse HEAD)_linux.tar.gz"
-OUTPUT_MODULES="$(git rev-parse --abbrev-ref HEAD)_$(date '+%Y%m%d%H%M%S')_$(git rev-parse HEAD)_${MODULES_TAR}"
+OUTPUT_KERNEL="$(git rev-parse --abbrev-ref HEAD)_date +%Y%m%d%H%M%S_$(git rev-parse HEAD)_linux.tar.gz"
+OUTPUT_MODULES="$(git rev-parse --abbrev-ref HEAD)_date +%Y%m%d%H%M%S_$(git rev-parse HEAD)_modules.tar.gz"
 
 mkdir -p ${OUTPUT_DIR}
 

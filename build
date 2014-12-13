@@ -7,14 +7,15 @@
 ### Sources
 SRC_DIR="/var/tmp/embedux/download"
 KERNEL_URL="http://www.kernel.org/pub/linux/kernel/v3.x"
-KERNEL_FILE="linux-3.17.tar.gz"
+KERNEL_FILE="linux-3.18.tar.gz"
 KERNEL_SHA="sha256sums.asc"
 
 ### Patches
 GPATCH_DIR="gentoo-patches"
 GPATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
-GPATCH_BASE_FILE="genpatches-3.17-5.base.tar.xz"
-GPATCH_EXTRAS_FILE="genpatches-3.17-5.extras.tar.xz"
+GPATCH_BASE_FILE="genpatches-3.18-2.base.tar.xz"
+GPATCH_EXTRAS_FILE="genpatches-3.18-2.extras.tar.xz"
+GPATCH_EXPERIMENTAL_FILE=" genpatches-3.18-2.experimental.tar.xz"
 
 #####################
 # Script            #
@@ -52,6 +53,11 @@ wget -N ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}
 
 echo "Extracting ${GPATCH_EXTRAS_FILE}"
 tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
+
+echo "Downloading ${GPATCH_EXPERIMENTAL_FILE} from ${KERNEL_URL}"
+wget -N ${GPATCH_URL}/${GPATCH_EXPERIMENTAL_FILE} -P ${SRC_DIR}
+echo "Extracting ${GPATCH_EXPERIMENTAL_FILE}"
+tar -xf ${SRC_DIR}/${GPATCH_EXPERIMENTAL_FILE} -C ${GPATCH_DIR}
 
 ### Apply gentoo patchset
 echo "Applying gentoo patches"

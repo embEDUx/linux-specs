@@ -5,10 +5,10 @@
 #####################
 
 ### Sources
-KERNEL_VERSION="3.17.2"
+KERNEL_VERSION="3.18.0"
 KERNEL_CONFIG=".config"
 KERNEL_IMG="zImage"
-KERNEL_DTB="imx6q-cm-fx6.dtb"
+KERNEL_DTB=""
 ARCH="arm"
 
 #####################
@@ -42,8 +42,10 @@ echo "Building ${KERNEL_IMG} with $(nproc) jobs"
 make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_IMG}
 
 ### DTB
-echo "Building ${KERNEL_DTB} with $(nproc) jobs"
-make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_DTB}
+if [ ! -z ${KERNEL_DTB} ]; then
+  echo "Building ${KERNEL_DTB} with $(nproc) jobs"
+  make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_DTB}
+fi
 
 ### Modules
 MODULES_DIR="modules"
@@ -63,14 +65,13 @@ fi
 OUTPUT_DIR="output"
 OUTPUT_KERNEL="$(git rev-parse --abbrev-ref HEAD)_$(date '+%Y%m%d%H%M%S')_$(git rev-parse HEAD)_linux.tar.gz"
 OUTPUT_MODULES="$(git rev-parse --abbrev-ref HEAD)_$(date '+%Y%m%d%H%M%S')_$(git rev-parse HEAD)_${MODULES_TAR}"
-
 mkdir -p ${OUTPUT_DIR}
 
 echo "Providing output in ${OUTPUT_DIR}"
-
-tar -czf ${OUTPUT_DIR}/${OUTPUT_KERNEL} -C ${KERNEL_DIR}/arch/${ARCH}/boot ${KERNEL_IMG} -C dts ${KERNEL_DTB}
+PACK_CMD="tar -czf ${OUTPUT_DIR}/${OUTPUT_KERNEL} -C ${KERNEL_DIR}/arch/${ARCH}/boot ${KERNEL_IMG}"
+[ ! -z ${KERNEL_DTB} ] && PACK_CMD="${PACK_CMD} -C dts ${KERNEL_DTB}"
+${PACK_CMD}
 
 if [ -e ${MODULES_TAR} ]
   then mv ${MODULES_TAR} ${OUTPUT_DIR}/${OUTPUT_MODULES}
 fi
-

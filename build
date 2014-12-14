@@ -15,7 +15,7 @@ GPATCH_DIR="gentoo-patches"
 GPATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
 GPATCH_BASE_FILE="genpatches-3.18-2.base.tar.xz"
 GPATCH_EXTRAS_FILE="genpatches-3.18-2.extras.tar.xz"
-GPATCH_EXPERIMENTAL_FILE=" genpatches-3.18-2.experimental.tar.xz"
+GPATCH_EXPERIMENTAL_FILE="genpatches-3.18-2.experimental.tar.xz"
 
 #####################
 # Script            #

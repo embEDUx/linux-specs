@@ -39,7 +39,9 @@ cp ${KERNEL_CONFIG} ${KERNEL_DIR}/${KERNEL_CONFIG}
 
 ### Kernel
 echo "Building ${KERNEL_IMG} with $(nproc) jobs"
-make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_IMG}
+MAKE_CMD="make -C ${KERNEL_DIR} -j$(nproc) ${KERNEL_IMG}"
+echo "Running ${MAKE_CMD}"
+${MAKE_CMD}
 
 ### DTB
 if [ ! -z ${KERNEL_DTB} ]; then

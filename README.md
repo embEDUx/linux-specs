@@ -5,4 +5,4 @@
 ## Gentoo Patches 3.18.2
 * [Basic](http://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-3.18-2.base.tar.xz)
 * [Extra](http://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-3.18-2.extras.tar.xz)
-* [EXPERIMENTAL](http://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-3.18-2.experimental.tar.xz)
+* [Experimental](http://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-3.18-2.experimental.tar.xz)

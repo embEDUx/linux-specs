@@ -62,5 +62,6 @@ tar -xf ${SRC_DIR}/${GPATCH_EXPERIMENTAL_FILE} -C ${GPATCH_DIR}
 ### Apply gentoo patchset
 echo "Applying gentoo patches"
 for patch in $(ls ${GPATCH_DIR}/*.patch 2>/dev/null) 
+  echo "Applaying ${patch}
 	do patch -t -p1 < $patch
 done

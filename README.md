@@ -5,3 +5,4 @@
 ## Gentoo Patches 3.17.5
 * [Basic](http://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-3.17-5.base.tar.xz)
 * [Extra](http://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-3.17-5.extras.tar.xz)
+* [Experimental](http://dev.gentoo.org/~mpagano/genpatches/tarballs/genpatches-3.17-5.experimental.tar.xz)

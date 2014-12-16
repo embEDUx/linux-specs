@@ -63,7 +63,7 @@ fi
 OUTPUT_DIR="output"
 OUTPUT_KERNEL="$(git rev-parse --abbrev-ref HEAD)_$(date +'%Y%m%d%H%M%S')_$(git rev-parse --short HEAD)_linux.tar.gz"
 OUTPUT_MODULES="$(git rev-parse --abbrev-ref HEAD)_$(date '+%Y%m%d%H%M%S')_$(git rev-parse --short HEAD)_${MODULES_TAR}"
-OUTPUT_CONFIG="$(git rev-parse --abbrev-ref HEAD)_$(date '+%Y%m%d%H%M%S')_$(git rev-parse --short HEAD)_${KERNEL_CONFIG}
+OUTPUT_CONFIG="$(git rev-parse --abbrev-ref HEAD)_$(date '+%Y%m%d%H%M%S')_$(git rev-parse --short HEAD)_${KERNEL_CONFIG}"
 
 mkdir -p ${OUTPUT_DIR}
 

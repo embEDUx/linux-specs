@@ -40,7 +40,7 @@ echo "Extracting ${KERNEL_FILE}"
 tar -xf ${SRC_DIR}/${KERNEL_FILE} --strip 1
 
 ### Gentoo patchset
-mkdir ${GPATCH_DIR}
+mkdir -p ${GPATCH_DIR}
 
 echo "Downloading ${GPATCH_BASE_FILE} from ${KERNEL_URL}"
 wget -N ${GPATCH_URL}/${GPATCH_BASE_FILE} -P ${SRC_DIR}

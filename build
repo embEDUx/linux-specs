@@ -38,7 +38,7 @@ popd
 
 ### Pack sources
 OUTPUT_ROOT=root.tar
-CMD="tar --transform=s,^,/usr/src/,S --transform=s/${KERNEL_DIR}/${KERNEL_DIR}-${KERNEL_VERSION}-gentoo/ --exclude=.git -cf ${OUTPUT_ROOT} ${KERNEL_DIR}"
+CMD="tar --transform=s,^,/usr/src/,S --transform=s/${KERNEL_DIR}/${KERNEL_DIR}-${KERNEL_VERSION}-embedux/ --exclude=.git -cf ${OUTPUT_ROOT} ${KERNEL_DIR}"
 echo "PACKING: ${CMD}"
 ${CMD}
  

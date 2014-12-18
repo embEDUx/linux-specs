@@ -22,43 +22,60 @@ GPATCH_EXPERIMENTAL_FILE="genpatches-3.17-5.experimental.tar.xz"
 #####################
 
 ### Prepare folder
-mkdir -p ${SRC_DIR}
+CMD="mkdir -p ${SRC_DIR}"
+echo "PREPARING: ${CMD}"
+${CMD}
 
 ### Kernel sources and patches
 
-echo "Downloading ${KERNEL_SHA} from ${KERNEL_URL}"
-wget -N ${KERNEL_URL}/${KERNEL_SHA} -P ${SRC_DIR}
-echo "Downloading ${KERNEL_FILE} from ${KERNEL_URL}"
-wget -N ${KERNEL_URL}/${KERNEL_FILE} -P ${SRC_DIR}
+CMD="wget -N ${KERNEL_URL}/${KERNEL_SHA} -P ${SRC_DIR}"
+echo "DOWNLOADING: ${CMD}"
+${CMD}
 
-echo "Checking sha265 hash on ${KERNEL_FILE}"
-if [[ -z $(grep `shasum -a 256 ${SRC_DIR}/${KERNEL_FILE}` ${SRC_DIR}/${KERNEL_SHA}) ]]
+CMD="wget -N ${KERNEL_URL}/${KERNEL_FILE} -P ${SRC_DIR}"
+echo "DOWNLOADING: ${CMD}"
+${CMD}
+
+# Checking sha265 hash on kernel archiv
+CMD="grep `shasum -a 256 ${SRC_DIR}/${KERNEL_FILE}` ${SRC_DIR}/${KERNEL_SHA}"
+echo "CHECKING: ${CMD}"
+if [[ -z ${CMD} ]]
   then exit
 fi
 
-echo "Extracting ${KERNEL_FILE}"
-tar -xf ${SRC_DIR}/${KERNEL_FILE} --strip 1
+# Extract kernel archiv
+CMD="tar -xf ${SRC_DIR}/${KERNEL_FILE} --strip 1"
+echo "EXTRACTING: ${CMD}"
+${CMD}
 
 ### Gentoo patchset
-mkdir -p ${GPATCH_DIR}
+CMD="mkdir -p ${GPATCH_DIR}"
+echo "PREPARING: ${CMD}"
+${CMD}
 
-echo "Downloading ${GPATCH_BASE_FILE} from ${KERNEL_URL}"
-wget -N ${GPATCH_URL}/${GPATCH_BASE_FILE} -P ${SRC_DIR}
+CMD="wget -N ${GPATCH_URL}/${GPATCH_BASE_FILE} -P ${SRC_DIR}"
+echo "DOWNLOADING: ${CMD}"
+${CMD}
 
-echo "Extracting ${GPATCH_BASE_FILE}"
-tar -xf ${SRC_DIR}/${GPATCH_BASE_FILE} -C ${GPATCH_DIR}
+CMD="tar -xf ${SRC_DIR}/${GPATCH_BASE_FILE} -C ${GPATCH_DIR}"
+echo "EXTRACTING: ${CMD}"
+${CMD}
 
-echo "Downloading ${GPATCH_EXTRAS_FILE} from ${KERNEL_URL}"
-wget -N ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}
+CMD="wget -N ${GPATCH_URL}/${GPATCH_EXTRAS_FILE} -P ${SRC_DIR}"
+echo "DOWNLOADING: ${CMD}"
+${CMD}
 
-echo "Extracting ${GPATCH_EXTRAS_FILE}"
-tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}
+CMD="tar -xf ${SRC_DIR}/${GPATCH_EXTRAS_FILE} -C ${GPATCH_DIR}"
+echo "EXTRACTING: ${CMD}"
+${CMD}
 
-echo "Downloading ${GPATCH_EXPERIMENTAL_FILE} from ${KERNEL_URL}"
-wget -N ${GPATCH_URL}/${GPATCH_EXPERIMENTAL_FILE} -P ${SRC_DIR}
+CMD="wget -N ${GPATCH_URL}/${GPATCH_EXPERIMENTAL_FILE} -P ${SRC_DIR}"
+echo "DOWNLOADING: ${CMD}"
+${CMD}
 
-echo "Extracting ${GPATCH_EXPERIMENTAL_FILE}"
-tar -xf ${SRC_DIR}/${GPATCH_EXPERIMENTAL_FILE} -C ${GPATCH_DIR}
+CMD="tar -xf ${SRC_DIR}/${GPATCH_EXPERIMENTAL_FILE} -C ${GPATCH_DIR}"
+echo "EXTRACTING: ${CMD}"
+${CMD}
 
 ### Apply gentoo patchset
 echo "Applying gentoo patches"

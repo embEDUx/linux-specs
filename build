@@ -78,7 +78,6 @@ echo "EXTRACTING: ${CMD}"
 ${CMD}
 
 ### Apply gentoo patchset
-echo "Applying gentoo patches"
 for patch in $(ls ${GPATCH_DIR}/*.patch* 2>/dev/null); do
   echo "PATCHING: ${patch}"
   patch -t -p1 < ${patch}

@@ -118,3 +118,13 @@ if [ -e ${KERNEL_CONFIG} ]
     echo "PROVIDING: ${CMD}"
     ${CMD}
 fi
+
+for ln_arg in \
+  "${OUTPUT_KERNEL} ${OUTPUT_DIR}/latest.kernel" \
+  "${OUTPUT_ROOT_Z2} ${OUTPUT_DIR}/latest.root-addon" \
+  "${OUTPUT_CONFIG} ${OUTPUT_DIR}/latest.config"
+do
+  CMD="ln -sf ${ln_arg}"
+  echo ${CMD}
+  ${CMD}
+done

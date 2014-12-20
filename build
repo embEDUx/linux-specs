@@ -5,7 +5,7 @@
 ######################################
 
 KERNEL_VERSION="3.18.0"
-KERNEL_DTB="imx6q-cm-fx6.dtb"
+KERNEL_DTB="imx6q-sbc-fx6m.dtb"
 ARCH="arm"
 
 ######################################

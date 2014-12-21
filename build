@@ -14,8 +14,7 @@ KERNEL_IMG="zImage"
 ######################################
 SRC_DIR="linux"
 
-# Cloning kernel from kernel branch
-# git clone -b ${KERNEL_VERSION} --depth 1 --single-branch $(git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}') ${SRC_DIR} && . ${SRC_DIR}/build
+git clone -b ${KERNEL_VERSION} --depth 1 --single-branch $(git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}') ${SRC_DIR} && . ${SRC_DIR}/build
 
 . ${SRC_DIR}/build
 

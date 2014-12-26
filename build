@@ -11,7 +11,7 @@ KERNEL_SHA="sha256sums.asc"
 
 ### Patches
 PATCH_DIR="genpatches"
-PATCH_VERSION="3.18-2"
+PATCH_VERSION="3.18-3"
 PATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
 PATCH_PART="base extras experimental"
 
@@ -92,13 +92,16 @@ function provide_output {
   cp ${SRC_DIR}/.config ${OUTPUT_DIR}/${OUTPUT_PREFIX}_config
 }
 
-function build {
+function prepare {
   dl_src
   dl_patch
   apply_patch
   apply_user_patch
   pack_src
   copy_config
+}
+
+function build {
   build_src
   build_modules
   if [ $(type -t pre_output) == "function" ]

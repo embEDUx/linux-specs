@@ -15,9 +15,14 @@ PATCH_VERSION="3.18-3"
 PATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
 PATCH_PART="base extras experimental"
 
+### Build variables
+[ ! -z ${EMBEDUX_TMP} ] || EMBEDUX_TMP=${PWD}
+
+
 #####################
 # Script            #
 #####################
+
 
 function dl_src {
   wget -N ${KERNEL_URL}/${KERNEL_SHA} -P ${EMBEDUX_TMP}

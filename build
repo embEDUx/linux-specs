@@ -4,7 +4,7 @@
 # Configuration                      #                    
 ######################################
 
-KERNEL_VERSION="3.18.0"
+KERNEL_VERSION="3.18.1"
 KERNEL_DTB=""
 KERNEL_CONFIG=".config"
 KERNEL_IMG="zImage"
@@ -26,6 +26,5 @@ function post_output {
   done
 }
 
+prepare
 build
-
-

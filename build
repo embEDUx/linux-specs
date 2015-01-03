@@ -101,11 +101,11 @@ function build {
   copy_config
   build_src
   build_modules
-  if [ $(type -t pre_output) == "function" ]
+  if [ "$(type -t pre_output)" == "function" ]
     then pre_output
   fi
   provide_output
-  if [ $(type -t post_output) == "function" ]
+  if [ "$(type -t post_output)" == "function" ]
     then post_output
   fi
 }

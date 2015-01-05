@@ -70,7 +70,7 @@ function build_modules {
     then
       make modules -C ${SRC_DIR}
       mkdir -p ${MODULES_DIR}
-      INSTALL_MOD_PATH=${MODULES_DIR} make modules_install -C ${SRC_DIR}
+      INSTALL_MOD_PATH=$(pwd)/${MODULES_DIR} make modules_install -C ${SRC_DIR}
   fi
 }
 

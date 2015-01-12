@@ -101,7 +101,7 @@ function prepare {
   pack_src
 }
 
-function buid {  
+function build {  
   build_src
   build_modules
   if [ "$(type -t pre_output)" == "function" ]

@@ -52,12 +52,12 @@ function apply_user_patch {
   done     
 }
 
-function pack_src {
-  tar --transform=s,^,/usr/src/,S --transform=s/${SRC_DIR}/${SRC_DIR}-${KERNEL_VERSION}-embedux/ --exclude=.git -cf root.tar ${SRC_DIR}
-}
-
 function copy_config {
   cp ${KERNEL_CONFIG} ${SRC_DIR}/.config
+}
+
+function pack_src {
+  tar --transform=s,^,/usr/src/,S --transform=s/${SRC_DIR}/${SRC_DIR}-${KERNEL_VERSION}-embedux/ --exclude=.git -cf root.tar ${SRC_DIR}
 }
 
 function build_src {
@@ -92,13 +92,16 @@ function provide_output {
   cp ${SRC_DIR}/.config ${OUTPUT_DIR}/${OUTPUT_PREFIX}_config
 }
 
-function build {
+function prepare {
   dl_src
   dl_patch
   apply_patch
   apply_user_patch
-  pack_src
   copy_config
+  pack_src
+}
+
+function buid {  
   build_src
   build_modules
   if [ "$(type -t pre_output)" == "function" ]

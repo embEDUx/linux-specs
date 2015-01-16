@@ -57,7 +57,7 @@ function copy_config {
 }
 
 function pack_src {
-  tar --transform=s,^,/usr/src/,S --transform=s/${SRC_DIR}/${SRC_DIR}-${KERNEL_VERSION}-embedux/ --exclude=.git -cf root.tar ${SRC_DIR}
+  tar --transform=s,^,/usr/src/,S --transform=s/${SRC_DIR}/${SRC_DIR}-${KERNEL_VERSION}-embedux/ --exclude=.git -cf root.tar -C ${SRC_DIR} ${SRC_DIR}
 }
 
 function build_src {

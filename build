@@ -90,7 +90,7 @@ function provide_output {
 
   mv root.tar ${OUTPUT_DIR}/${OUTPUT_PREFIX}_root.tar
   if [ $(grep CONFIG_MODULES=y ${SRC_DIR}/.config) ]
-    then tar --transform=s/${MODULES_DIR}// -rf ${OUTPUT_DIR}/${OUTPUT_PREFIX}_root.tar ${MODULES_DIR}
+    then tar --transform=s,${MODULES_DIR}/,, -rf ${OUTPUT_DIR}/${OUTPUT_PREFIX}_root.tar ${MODULES_DIR}
   fi
   bzip2 -5 ${OUTPUT_DIR}/${OUTPUT_PREFIX}_root.tar
 

@@ -1,0 +1,22 @@
+#! /bin/bash -ex
+
+######################################
+# Configuration                      #                    
+######################################
+
+KERNEL_VERSION="3.17.2"
+KERNEL_DTB="tegra20-iris-512.dtb"
+KERNEL_CONFIG=".config"
+KERNEL_IMG="zImage"
+
+######################################
+# Script (modify only with caution!) #
+######################################
+SRC_DIR="linux"
+
+git clone -b ${KERNEL_VERSION} --depth 1 --single-branch $(git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}') ${SRC_DIR} && . ${SRC_DIR}/build
+
+prepare
+build
+
+

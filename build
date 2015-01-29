@@ -84,8 +84,11 @@ function provide_output {
   OUTPUT_PREFIX="$(git rev-parse --abbrev-ref HEAD)_$(date '+%Y%m%d%H%M%S')_$(git rev-parse --short HEAD)"
   
   mkdir -p ${OUTPUT_DIR}
+  ls -lha ${SRC_DIR}/arch/${ARCH}/boot/${KERNEL_IMG} # debug output
   tar -cf ${OUTPUT_DIR}/${OUTPUT_PREFIX}_boot.tar -C ${SRC_DIR}/arch/${ARCH}/boot ${KERNEL_IMG}
-  tar -rf ${OUTPUT_DIR}/${OUTPUT_PREFIX}_boot.tar -C ${SRC_DIR}/arch/${ARCH}/boot/dts ${KERNEL_DTB}
+  if [ -z ${KERNEL_DTB} ]; then
+    tar -rf ${OUTPUT_DIR}/${OUTPUT_PREFIX}_boot.tar -C ${SRC_DIR}/arch/${ARCH}/boot/dts ${KERNEL_DTB}
+  fi
   bzip2 -5 ${OUTPUT_DIR}/${OUTPUT_PREFIX}_boot.tar
 
   mv root.tar ${OUTPUT_DIR}/${OUTPUT_PREFIX}_root.tar

@@ -8,7 +8,7 @@ KERNEL_VERSION="3.18.1"
 KERNEL_DTB=""
 KERNEL_CONFIG=".config"
 KERNEL_IMG="bzImage"
-ARCH="amd64"
+ARCH="x86_64"
 
 ######################################
 # Script (modify only with caution!) #

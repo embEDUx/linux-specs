@@ -26,5 +26,4 @@ function post_output {
   done
 }
 
-prepare
 build

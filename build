@@ -86,7 +86,7 @@ function provide_output {
   mkdir -p ${OUTPUT_DIR}
   ls -lha ${SRC_DIR}/arch/${ARCH}/boot/${KERNEL_IMG} # debug output
   tar -cf ${OUTPUT_DIR}/${OUTPUT_PREFIX}_boot.tar -C ${SRC_DIR}/arch/${ARCH}/boot ${KERNEL_IMG}
-  if [ -z ${KERNEL_DTB} ]; then
+  if [[ ! -z ${KERNEL_DTB} ]]; then
     tar -rf ${OUTPUT_DIR}/${OUTPUT_PREFIX}_boot.tar -C ${SRC_DIR}/arch/${ARCH}/boot/dts ${KERNEL_DTB}
   fi
   bzip2 -5 ${OUTPUT_DIR}/${OUTPUT_PREFIX}_boot.tar

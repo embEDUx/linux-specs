@@ -6,7 +6,7 @@
 
 ### Sources
 KERNEL_URL="http://www.kernel.org/pub/linux/kernel/v3.x"
-KERNEL_FILE="linux-3.19.tar.gz"
+KERNEL_FILE="linux-3.19.1.tar.gz"
 KERNEL_SHA="sha256sums.asc"
 
 ### Patches

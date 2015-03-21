@@ -47,13 +47,13 @@ function dl_patch {
 
 function apply_patch {
   for patch in $(ls ${PATCH_DIR}/*.patch* 2>/dev/null); do
-  	patch -d ${SRC_DIR} -t -p1 -i ../$patch
+  	patch -d ${SRC_DIR} --forward -t -p1 -i ../$patch
   done
 }
 
 function apply_user_patch {
   for patch in $(ls *.patch 2>/dev/null); do       
-    patch -d ${SRC_DIR} -t -p1 -i ../$patch
+    patch -d ${SRC_DIR} --forward -t -p1 -i ../$patch
   done     
 }
 

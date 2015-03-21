@@ -101,11 +101,15 @@ function prepare {
   pack_src
 }
 
-function build {
+function build {  
   build_src
   build_modules
-  [[ -n $pre_output ]] && [[ $(type -t pre_output) == "function" ]] && pre_output
+  if [ "$(type -t pre_output)" == "function" ]
+    then pre_output
+  fi
   provide_output
-  [[ -n $post_output ]] && [[ $(type -t post_output) == "function" ]] && post_output
+  if [ "$(type -t post_output)" == "function" ]
+    then post_output
+  fi
 }
 

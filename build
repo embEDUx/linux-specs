@@ -109,12 +109,8 @@ function prepare {
 function build {
   build_src
   build_modules
-  if [ $(type -t pre_output) == "function" ]
-    then pre_output
-  fi
+  [[ -n $pre_output ]] && [[ $(type -t pre_output) == "function" ]] && pre_output
   provide_output
-  if [ $(type -t post_output) == "function" ]
-    then post_output
-  fi
+  [[ -n $post_output ]] && [[ $(type -t post_output) == "function" ]] && post_output
 }
 

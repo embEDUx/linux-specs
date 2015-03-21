@@ -15,7 +15,7 @@ KERNEL_IMG="bzImage"
 ######################################
 SRC_DIR="linux"
 
-git clone -b ${KERNEL_VERSION} --depth 1 --single-branch $(git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}') ${SRC_DIR} && . ${SRC_DIR}/build
+git clone -b ${KERNEL_VERSION} --depth 1 --single-branch . ${SRC_DIR} && . ${SRC_DIR}/build
 
 function post_output {
   for ln_arg in \

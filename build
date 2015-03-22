@@ -4,19 +4,28 @@
 # Configuration                      #                    
 ######################################
 
-KERNEL_VERSION="3.18.0"
+KERNEL_VERSION="3.18.8"
 KERNEL_DTB="imx6q-sbc-fx6m.dtb"
 KERNEL_CONFIG=".config"
 KERNEL_IMG="zImage"
 
+ARCH=arm
+CROSS_COMPILE=/home/junky/Downloads/embEDUx/armv7a-ctng-linux-gnueabihf/bin/armv7a-ctng-linux-gnueabihf-
+
 ######################################
 # Script (modify only with caution!) #
 ######################################
-SRC_DIR="linux"
+PWD=$(pwd)
+SRC_DIR="${PWD}/linux"
 
 git clone -b ${KERNEL_VERSION} --depth 1 --single-branch $(git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}') ${SRC_DIR} && . ${SRC_DIR}/build
 
-prepare
+dl_src
+dl_patch
+rm -f ${PWD}/genpatches/5000_enable-additional-cpu-optimizations-for-gcc.patch || true
+apply_patch
+apply_user_patch
+pack_src
+copy_config
+
 build
-
-

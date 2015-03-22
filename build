@@ -74,7 +74,7 @@ function build_modules {
   MODULES_DIR="${PWD}/modules"
   if [ $(grep CONFIG_MODULES=y ${SRC_DIR}/.config) ]
     then
-      make modules -C ${SRC_DIR}
+      make modules -j$(nproc) -C ${SRC_DIR}
       mkdir -p ${MODULES_DIR}
       INSTALL_MOD_PATH=${MODULES_DIR} make modules_install -C ${SRC_DIR}
   fi

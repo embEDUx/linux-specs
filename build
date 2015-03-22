@@ -9,9 +9,6 @@ KERNEL_DTB="imx6q-sbc-fx6m.dtb"
 KERNEL_CONFIG=".config"
 KERNEL_IMG="zImage"
 
-ARCH=arm
-CROSS_COMPILE=/home/junky/Downloads/embEDUx/armv7a-ctng-linux-gnueabihf/bin/armv7a-ctng-linux-gnueabihf-
-
 ######################################
 # Script (modify only with caution!) #
 ######################################

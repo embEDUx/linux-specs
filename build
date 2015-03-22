@@ -59,7 +59,7 @@ function apply_user_patch {
 }
 
 function pack_src {
-  tar --transform=s,^${PWD},/usr/src,S --transform=s,${SRC_DIR},${SRC_DIR}-${KERNEL_VERSION}-embedux, --exclude=.git -cf root.tar ${SRC_DIR}
+  tar --transform=s,${SRC_DIR},${SRC_DIR}-${KERNEL_VERSION}-embedux, --transform=s,${PWD},/usr/src, --exclude=.git -cf root.tar ${SRC_DIR}
 }
 
 function copy_config {

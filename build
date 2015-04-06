@@ -4,11 +4,11 @@
 # Configuration                      #                    
 ######################################
 
+ARCH="x86"
 KERNEL_VERSION="3.18.0"
 KERNEL_DTB=""
 KERNEL_CONFIG=".config"
-KERNEL_IMG="zImage"
-ARCH="x86"
+KERNEL_IMG="bzImage"
 
 ######################################
 # Script (modify only with caution!) #
@@ -29,5 +29,4 @@ function post_output {
 
 prepare
 build
-
 

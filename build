@@ -11,7 +11,7 @@ KERNEL_SHA="sha256sums.asc"
 
 ### Patches
 PATCH_DIR="genpatches"
-PATCH_VERSION="3.18-3"
+PATCH_VERSION="3.18-13"
 PATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
 PATCH_PART="base extras experimental"
 

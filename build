@@ -43,6 +43,7 @@ function dl_patch {
     wget -N ${PATCH_URL}/${PATCH} -P ${EMBEDUX_TMP}
     tar -xf ${EMBEDUX_TMP}/${PATCH} -C ${PATCH_DIR}
   done
+  rm -f ${PATCH_DIR}/genpatches/5000_enable-additional-cpu-optimizations-for-gcc.patch || true
 }
 
 function apply_patch {

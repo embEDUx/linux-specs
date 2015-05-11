@@ -4,7 +4,7 @@
 # Configuration                      #                    
 ######################################
 
-KERNEL_VERSION="3.18.1"
+KERNEL_VERSION="3.18.11"
 KERNEL_DTB=""
 KERNEL_CONFIG=".config"
 KERNEL_IMG="bzImage"
@@ -27,5 +27,12 @@ function post_output {
   done
 }
 
-prepare
-build
+dl_src
+dl_patch
+apply_patch
+apply_user_patch
+copy_config
+pack_src
+build_src
+build_modules
+provide_output

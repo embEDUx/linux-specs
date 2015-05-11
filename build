@@ -13,7 +13,7 @@ KERNEL_SHA="sha256sums.asc"
 PATCH_DIR="genpatches"
 PATCH_VERSION="3.18-13"
 PATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
-PATCH_PART="base extras experimental"
+PATCH_PART="base extras"
 
 ### Build variables
 [ ! -z ${EMBEDUX_TMP} ] || EMBEDUX_TMP=${PWD}

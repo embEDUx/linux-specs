@@ -5,15 +5,15 @@
 #####################
 
 ### Sources
-KERNEL_URL="http://www.kernel.org/pub/linux/kernel/v3.x"
-KERNEL_FILE="linux-3.18.tar.gz"
+KERNEL_URL="http://www.kernel.org/pub/linux/kernel/v4.x"
+KERNEL_FILE="linux-4.0.tar.gz"
 KERNEL_SHA="sha256sums.asc"
 
 ### Patches
 PATCH_DIR="genpatches"
-PATCH_VERSION="3.18-13"
+PATCH_VERSION="4.0-6"
 PATCH_URL="http://dev.gentoo.org/~mpagano/genpatches/tarballs"
-PATCH_PART="base extras"
+PATCH_PART="base extras experimental"
 
 ### Build variables
 [ ! -z ${EMBEDUX_TMP} ] || EMBEDUX_TMP=${PWD}

@@ -4,7 +4,7 @@
 # Configuration                      #                    
 ######################################
 
-KERNEL_VERSION="3.18.1"
+KERNEL_VERSION="4.0.4"
 KERNEL_DTB=""
 KERNEL_CONFIG=".config"
 KERNEL_IMG="zImage"

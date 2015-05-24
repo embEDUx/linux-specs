@@ -54,6 +54,7 @@ function apply_patch {
 
 function apply_user_patch {
   for patch in $(ls *.patch 2>/dev/null); do       
+    echo Applying $patch
     patch --forward -d ${SRC_DIR} -t -p1 < $patch
   done     
 }

@@ -44,6 +44,7 @@ function dl_patch {
     tar -xf ${EMBEDUX_TMP}/${PATCH} -C ${PATCH_DIR}
   done
   mv ${PATCH_DIR}/5000_enable-additional-cpu-optimizations-for-gcc.patch{,.disabled}
+  mv ${PATCH_DIR}/5010_enable-additional-cpu-optimizations-for-gcc-4.9.patch{,.disabled}
 }
 
 function apply_patch {

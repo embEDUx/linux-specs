@@ -48,6 +48,7 @@ function dl_patch {
 
 function apply_patch {
   for patch in $(ls ${PATCH_DIR}/*.patch* 2>/dev/null); do
+    echo Applying $patch
   	patch --forward -d ${SRC_DIR} -t -p1 < $patch
   done
 }

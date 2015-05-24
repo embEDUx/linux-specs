@@ -43,18 +43,18 @@ function dl_patch {
     wget -N ${PATCH_URL}/${PATCH} -P ${EMBEDUX_TMP}
     tar -xf ${EMBEDUX_TMP}/${PATCH} -C ${PATCH_DIR}
   done
-  rm -f ${PATCH_DIR}/genpatches/5000_enable-additional-cpu-optimizations-for-gcc.patch || true
+  mv ${PATCH_DIR}/5000_enable-additional-cpu-optimizations-for-gcc.patch{,.disabled}
 }
 
 function apply_patch {
   for patch in $(ls ${PATCH_DIR}/*.patch* 2>/dev/null); do
-  	patch -d ${SRC_DIR} -t -p1 < $patch
+  	patch --forward -d ${SRC_DIR} -t -p1 < $patch
   done
 }
 
 function apply_user_patch {
   for patch in $(ls *.patch 2>/dev/null); do       
-    patch -d ${SRC_DIR} -t -p1 < $patch
+    patch --forward -d ${SRC_DIR} -t -p1 < $patch
   done     
 }
 

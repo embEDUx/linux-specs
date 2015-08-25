@@ -5,7 +5,7 @@
 ######################################
 
 KERNEL_VERSION="4.0.4"
-KERNEL_DTB=""
+KERNEL_DTB="imx6q-sbc-fx6m-4.0.4.dtb"
 KERNEL_CONFIG=".config"
 KERNEL_IMG="zImage"
 

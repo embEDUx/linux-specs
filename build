@@ -16,15 +16,5 @@ SRC_DIR="linux"
 
 git clone -b ${KERNEL_VERSION} --depth 1 --single-branch $(git remote -v | sed -n '/.git/{p;q;}' | awk '{print $(NF-1)}') ${SRC_DIR} && . ${SRC_DIR}/build
 
-function post_output {
-  for ln_arg in \
-    "${OUTPUT_PREFIX}_boot.tar.bz2 ${OUTPUT_DIR}/latest.kernel" \
-    "${OUTPUT_PREFIX}_root.tar.bz2 ${OUTPUT_DIR}/latest.root-addon" \
-    "${OUTPUT_PREFIX}_config ${OUTPUT_DIR}/latest.config"
-  do
-    ln -sf ${ln_arg}
-  done
-}
-
 prepare
 build
